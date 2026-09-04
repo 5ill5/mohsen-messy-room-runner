@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#183153" />
+    <meta name="description" content="ساعد محسن على القفز فوق الكتب والحقائب والألعاب المرمية في غرفته الفوضوية." />
+    <title>محسن في البيت الفوضوي</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="game-header">
+        <div>
+          <p class="eyebrow">نسخة مبدئية</p>
+          <h1>محسن في البيت الفوضوي</h1>
+        </div>
+        <div class="score-card" aria-live="polite">
+          <span>النقاط</span>
+          <strong id="score">٠٠٠٠</strong>
+        </div>
+      </header>
+
+      <section class="game-frame" aria-label="منطقة اللعب">
+        <canvas id="gameCanvas" role="img" aria-label="محسن يركض داخل غرفة أطفال ويتجاوز الأشياء المرمية"></canvas>
+
+        <div class="overlay" id="startOverlay">
+          <div class="overlay-card">
+            <span class="overlay-icon" aria-hidden="true">🦕</span>
+            <h2>الغرفة مليئة بالأغراض!</h2>
+            <p>ساعد محسن على تجاوز الكتب والحقائب والألعاب. المس أي مكان للقفز.</p>
+            <button class="primary-button" id="startButton" type="button">ابدأ اللعب</button>
+          </div>
+        </div>
+
+        <div class="overlay is-hidden" id="gameOverOverlay">
+          <div class="overlay-card">
+            <span class="overlay-icon" aria-hidden="true">🧸</span>
+            <h2>اصطدم محسن!</h2>
+            <p>وصلت إلى <strong id="finalScore">٠</strong> نقطة</p>
+            <button class="primary-button" id="restartButton" type="button">حاول مرة ثانية</button>
+          </div>
+        </div>
+
+        <div class="time-pill" id="timeLabel">نهار</div>
+        <div class="level-pill" id="levelLabel">المستوى ١</div>
+      </section>
+      <footer class="credit" dir="ltr">powered by Abdullah AL-turki</footer>
+    </main>
+
+    <script src="./game.js"></script>
+  </body>
+</html>
