@@ -103,6 +103,7 @@ h1 {
   backdrop-filter: blur(14px);
 }
 
+.title-stack,
 .score-stack {
   display: grid;
   justify-items: center;
@@ -292,14 +293,9 @@ h1 {
   backdrop-filter: blur(10px);
 }
 
-.time-pill {
-  position: static;
-}
-
+.time-pill,
 .level-pill {
-  position: absolute;
-  top: max(76px, calc(env(safe-area-inset-top) + 66px));
-  right: 16px;
+  position: static;
 }
 
 .credit {
@@ -421,11 +417,6 @@ button:focus-visible {
     transform: translateY(-5px);
   }
 
-  .level-pill {
-    top: max(68px, calc(env(safe-area-inset-top) + 58px));
-    right: 8px;
-  }
-
   .credit {
     bottom: max(6px, env(safe-area-inset-bottom));
     padding: 4px 9px;
@@ -468,9 +459,10 @@ button:focus-visible {
   <body>
     <main class="page-shell">
       <header class="game-header">
-        <div>
+        <div class="title-stack">
           <p class="eyebrow">نسخة مبدئية</p>
           <h1>محسن في البيت الفوضوي</h1>
+          <div class="level-pill" id="levelLabel">المستوى ١</div>
         </div>
         <div class="score-stack">
           <div class="score-card" aria-live="polite">
@@ -514,8 +506,6 @@ button:focus-visible {
             <button class="primary-button" id="resumeButton" type="button">متابعة اللعب</button>
           </div>
         </div>
-
-        <div class="level-pill" id="levelLabel">المستوى ١</div>
 
         <div class="game-tools" aria-label="أدوات اللعبة">
           <button class="tool-button" id="pauseButton" type="button" aria-label="إيقاف اللعبة مؤقتًا" disabled>
