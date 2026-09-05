@@ -1102,13 +1102,27 @@ button:focus-visible {
     vibrate(12);
   }
 
+  function getDayCycle() {
+    const phase = (score % 600) / 600;
+    if (phase < 0.37) {
+      return { label: "نهار", darkness: (phase / 0.37) * 0.08 };
+    }
+    if (phase < 0.57) {
+      return { label: "غروب", darkness: 0.08 + ((phase - 0.37) / 0.2) * 0.62 };
+    }
+    if (phase < 0.83) {
+      return { label: "ليل", darkness: 0.7 + ((phase - 0.57) / 0.26) * 0.3 };
+    }
+    return { label: "فجر", darkness: 1 - ((phase - 0.83) / 0.17) };
+  }
+
   function updateScore() {
     const wholeScore = Math.floor(score);
     scoreEl.textContent = arabicDigits.format(wholeScore);
     highScoreEl.textContent = arabicDigits.format(Math.max(highScore, wholeScore));
-    const progress = clamp(score / 650, 0, 1);
+    const dayCycle = getDayCycle();
     const level = 1 + Math.floor(score / 100);
-    timeLabel.textContent = progress < 0.38 ? "نهار" : progress < 0.73 ? "غروب" : "ليل";
+    timeLabel.textContent = dayCycle.label;
     levelLabel.textContent = `المستوى ${new Intl.NumberFormat("ar-SA").format(level)}`;
   }
 
@@ -1295,7 +1309,7 @@ button:focus-visible {
   }
 
   function drawRoom() {
-    const dayProgress = clamp(score / 650, 0, 1);
+    const dayProgress = getDayCycle().darkness;
     const wallTop = mixColor("#c7eff9", "#26375f", dayProgress);
     const wallBottom = mixColor("#e9f8f5", "#495780", dayProgress);
     const wallGradient = ctx.createLinearGradient(0, 0, 0, groundY);
@@ -1743,7 +1757,7 @@ button:focus-visible {
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./service-worker.js?v=9").catch(() => {});
+      navigator.serviceWorker.register("./service-worker.js?v=10").catch(() => {});
     });
   }
 })();

@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE_NAME = "mohsen-game-v9";
+const CACHE_NAME = "mohsen-game-v10";
 const OPTIONAL_ASSETS = [
   "./",
   "./index.html",
