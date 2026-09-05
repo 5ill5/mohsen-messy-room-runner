@@ -310,13 +310,13 @@ h1 {
   top: max(184px, calc(env(safe-area-inset-top) + 172px));
   left: 50%;
   z-index: 2;
-  padding: 7px 15px;
+  padding: 5px 11px;
   border: 2px solid rgba(255, 255, 255, 0.82);
   border-radius: 999px;
   background: linear-gradient(135deg, rgba(244, 154, 55, 0.96), rgba(232, 91, 58, 0.96));
   color: #fff;
   box-shadow: 0 8px 24px rgba(201, 88, 34, 0.26);
-  font-size: 0.88rem;
+  font-size: 0.76rem;
   font-weight: 900;
   pointer-events: none;
   transform: translateX(-50%);
@@ -559,8 +559,8 @@ button:focus-visible {
 
   .combo-badge {
     top: max(169px, calc(env(safe-area-inset-top) + 157px));
-    padding: 5px 11px;
-    font-size: 0.76rem;
+    padding: 4px 9px;
+    font-size: 0.68rem;
   }
 
   .countdown-overlay strong {
@@ -758,6 +758,7 @@ button:focus-visible {
   let audioContext = null;
   let comboCount = 0;
   let comboMultiplier = 1;
+  let comboBadgeTimeout = 0;
   let countdownToken = 0;
 
   const MALOUK_WARNING_SECONDS = 1.3;
@@ -924,11 +925,18 @@ button:focus-visible {
     }
   }
 
-  function updateComboBadge() {
-    const visible = comboMultiplier >= 2;
+  function hideComboBadge() {
+    window.clearTimeout(comboBadgeTimeout);
+    comboBadge.classList.add("is-hidden");
+    comboBadge.setAttribute("aria-hidden", "true");
+  }
+
+  function showComboBadge() {
+    window.clearTimeout(comboBadgeTimeout);
     comboBadge.textContent = `كومبو ×${new Intl.NumberFormat("ar-SA").format(comboMultiplier)}`;
-    comboBadge.classList.toggle("is-hidden", !visible);
-    comboBadge.setAttribute("aria-hidden", String(!visible));
+    comboBadge.classList.remove("is-hidden");
+    comboBadge.setAttribute("aria-hidden", "false");
+    comboBadgeTimeout = window.setTimeout(hideComboBadge, 850);
   }
 
   function cancelCountdown(nextState) {
@@ -996,7 +1004,7 @@ button:focus-visible {
     setMaloukWarningVisible(false);
     comboCount = 0;
     comboMultiplier = 1;
-    updateComboBadge();
+    hideComboBadge();
     player.velocityY = 0;
     player.onGround = true;
     document.body.classList.remove("player-airborne");
@@ -1067,6 +1075,7 @@ button:focus-visible {
   function endGame() {
     cancelCountdown();
     state = "over";
+    hideComboBadge();
     maloukWarningActive = false;
     setMaloukWarningVisible(false);
     document.body.classList.remove("player-airborne");
@@ -1196,6 +1205,7 @@ button:focus-visible {
       if (!maloukWarningActive && obstacles.length === 0 && player.onGround) {
         maloukWarningActive = true;
         maloukWarningTimer = MALOUK_WARNING_SECONDS;
+        hideComboBadge();
         setMaloukWarningVisible(true);
         playSound("maloukWarning");
         vibrate([60, 45, 80]);
@@ -1229,8 +1239,10 @@ button:focus-visible {
         const previousMultiplier = comboMultiplier;
         comboMultiplier = Math.min(5, 1 + Math.floor(comboCount / 3));
         score += 3 * comboMultiplier;
-        updateComboBadge();
-        if (comboMultiplier > previousMultiplier) playSound("combo");
+        if (comboMultiplier > previousMultiplier) {
+          showComboBadge();
+          playSound("combo");
+        }
       }
     }
     obstacles = obstacles.filter((item) => item.x + item.width > -30);
@@ -1731,7 +1743,7 @@ button:focus-visible {
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./service-worker.js?v=7").catch(() => {});
+      navigator.serviceWorker.register("./service-worker.js?v=9").catch(() => {});
     });
   }
 })();
